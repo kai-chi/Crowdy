@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content">
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/surveyCardView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="@dimen/event_card_margin"
+        android:background="@color/colorLightPrimaryColor"
+        android:clickable="true"
+        android:elevation="@dimen/event_card_elevation"
+        app:cardCornerRadius="@dimen/cardCornerRadius">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/colorLightPrimaryColor">
+
+            <TextView
+                android:id="@+id/eventTitleTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/event_title_hint"
+                android:paddingLeft="@dimen/event_title_padding"
+                android:textColor="@color/colorPrimaryText"
+                android:textSize="@dimen/event_title_size"/>
+
+            <TextView
+                android:id="@+id/eventDescriptionTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/eventTitleTextView"
+                android:layout_gravity="center"
+                android:layout_marginLeft="@dimen/event_title_padding"
+                android:layout_marginRight="@dimen/event_title_padding"
+                android:hint="@string/event_description_hint"
+                android:lines="2"
+                android:textColor="@color/colorSecondaryText"/>
+
+            <ImageView
+                android:id="@+id/eventMenuImageView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                app:srcCompat="@drawable/ic_more_vert"/>
+
+            <ImageView
+                android:id="@+id/peopleImageView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/eventDescriptionTextView"
+                android:layout_below="@id/eventDescriptionTextView"
+                android:paddingLeft="@dimen/event_title_padding"
+                app:srcCompat="@drawable/ic_people"/>
+
+            <TextView
+                android:id="@+id/numberOfPeopleSignedUpTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/peopleImageView"
+                android:layout_alignParentBottom="false"
+                android:layout_centerInParent="false"
+                android:layout_toEndOf="@+id/peopleImageView"
+                android:textSize="26sp"/>
+
+            <ImageView
+                android:id="@+id/moneyImageView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@+id/numberOfPeopleSignedUpTextView"
+                android:layout_centerHorizontal="true"
+                app:srcCompat="@drawable/ic_euro_symbol"/>
+
+            <TextView
+                android:id="@+id/moneyLeftTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/numberOfPeopleSignedUpTextView"
+                android:layout_toEndOf="@+id/moneyImageView"
+                android:textSize="26sp"/>
+
+        </RelativeLayout>
+
+    </android.support.v7.widget.CardView>
+
+</LinearLayout>
