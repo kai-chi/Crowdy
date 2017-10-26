@@ -19,6 +19,13 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+
+        <provider
+            android:authorities="kaichi.crowdy.database"
+            android:name=".database.EventContentProvider"
+            android:enabled="true"
+            android:exported="false">
+        </provider>
     </application>
 
 </manifest>
