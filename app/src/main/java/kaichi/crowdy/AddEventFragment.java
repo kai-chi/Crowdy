@@ -44,8 +44,6 @@ public class AddEventFragment extends Fragment
 
     private TextInputLayout titleTextInputLayout;
     private TextInputLayout descriptionTextInputLayout;
-    private TextInputLayout moneyLeftTextInputLayout;
-    private TextInputLayout maxPeopleTextInputLayout;
     private Button saveButton;
 
     private CoordinatorLayout coordinatorLayout;
@@ -76,8 +74,6 @@ public class AddEventFragment extends Fragment
         titleTextInputLayout = view.findViewById(R.id.titleTextInputLayout);
         titleTextInputLayout.getEditText().addTextChangedListener(titleChangedListener);
         descriptionTextInputLayout = view.findViewById(R.id.descriptionTextInputLayout);
-        moneyLeftTextInputLayout = view.findViewById(R.id.moneyLeftTextInputLayout);
-        maxPeopleTextInputLayout = view.findViewById(R.id.maxPeopleTextInputLayout);
 
         saveButton = view.findViewById(R.id.saveButton);
         saveButton.setOnClickListener(saveEventButtonClicked);
@@ -144,10 +140,6 @@ public class AddEventFragment extends Fragment
                           titleTextInputLayout.getEditText().getText().toString());
         contentValues.put(Event.COLUMN_DESCRIPTION,
                           descriptionTextInputLayout.getEditText().getText().toString());
-        contentValues.put(Event.COLUMN_MONEY_LEFT,
-                          moneyLeftTextInputLayout.getEditText().getText().toString());
-        contentValues.put(Event.COLUMN_PEOPLE_SIGNED_UP,
-                          0);
 
         if (addingNewEvent) {
             Uri newEventUri = getActivity().getContentResolver().insert(Event.CONTENT_URI,
@@ -200,12 +192,9 @@ public class AddEventFragment extends Fragment
         if (data != null && data.moveToFirst()) {
             int titleIndex = data.getColumnIndex(Event.COLUMN_TITLE);
             int descriptionIndex = data.getColumnIndex(Event.COLUMN_DESCRIPTION);
-            int moneyLeftIndex = data.getColumnIndex(Event.COLUMN_MONEY_LEFT);
-            int numberOfPeopleIndex = data.getColumnIndex(Event.COLUMN_PEOPLE_SIGNED_UP);
 
             titleTextInputLayout.getEditText().setText(data.getString(titleIndex));
             descriptionTextInputLayout.getEditText().setText(data.getString(descriptionIndex));
-            moneyLeftTextInputLayout.getEditText().setText(data.getString(moneyLeftIndex));
 
             updateSaveButton();
         }

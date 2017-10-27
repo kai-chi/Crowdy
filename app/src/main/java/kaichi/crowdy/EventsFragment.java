@@ -64,7 +64,7 @@ public class EventsFragment extends Fragment
         RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity().getBaseContext()));
 
-        eventsAdapter = new EventsAdapter(new EventsAdapter.EventClickListener() {
+        eventsAdapter = new EventsAdapter(getContext(), new EventsAdapter.EventClickListener() {
 
             @Override
             public void onClick(Uri eventUri) {

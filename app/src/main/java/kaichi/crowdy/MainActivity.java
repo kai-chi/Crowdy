@@ -10,7 +10,8 @@ import android.view.MenuItem;
 
 public class MainActivity extends AppCompatActivity
         implements EventsFragment.EventsFragmentListener,
-        AddEventFragment.AddEventFragmentListener {
+        AddEventFragment.AddEventFragmentListener,
+        DetailFragment.DetailFragmentListener {
 
     // key for storing a event's Uri in a Bundle passed to a fragment
     public static final String EVENT_URI = "event_uri";
@@ -56,7 +57,17 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void displayEvent(Uri eventUri, int viewID) {
-        //TODO: add DetailEventFragment
+        DetailFragment detailFragment = new DetailFragment();
+
+        Bundle arguments = new Bundle();
+        arguments.putParcelable(EVENT_URI, eventUri);
+        detailFragment.setArguments(arguments);
+
+        FragmentTransaction transaction =
+                getSupportFragmentManager().beginTransaction();
+        transaction.replace(viewID, detailFragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
     }
 
     //display AddEventFragment to add new event
@@ -127,5 +138,16 @@ public class MainActivity extends AppCompatActivity
             displayEvent(eventUri,
                          R.id.fragment_container);
         }
+    }
+
+    @Override
+    public void onEventDeleted() {
+        getSupportFragmentManager().popBackStack();
+        eventsFragment.updateEventList();
+    }
+
+    @Override
+    public void onEditEvent(Uri eventUri) {
+
     }
 }

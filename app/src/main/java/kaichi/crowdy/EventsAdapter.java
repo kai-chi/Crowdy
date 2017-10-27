@@ -1,15 +1,15 @@
 package kaichi.crowdy;
 
+import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
-import kaichi.crowdy.database.EventDatabaseContract;
+import kaichi.crowdy.database.EventDatabaseContract.Event;
 
 import static android.support.v7.widget.RecyclerView.ViewHolder;
 
@@ -26,25 +26,22 @@ public class EventsAdapter
     public class EventViewHolder extends ViewHolder {
         public final TextView title;
         public final TextView description;
-        public final TextView numberOfPeopleSignedUp;
-        public final TextView moneyLeft;
-        public final ImageView menu;
         private long rowID;
 
-        public EventViewHolder(View itemView) {
+        public EventViewHolder(final View itemView) {
             super(itemView);
             title = itemView.findViewById(R.id.eventTitleTextView);
             description = itemView.findViewById(R.id.eventDescriptionTextView);
-            numberOfPeopleSignedUp = itemView.findViewById(R.id.numberOfPeopleSignedUpTextView);
-            moneyLeft = itemView.findViewById(R.id.moneyLeftTextView);
-            menu = itemView.findViewById(R.id.eventMenuImageView);
 
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    clickListener.onClick(EventDatabaseContract.Event.buildEventUri(rowID));
-                }
-            });
+            itemView.setOnClickListener(
+                    new View.OnClickListener() {
+
+                        @Override
+                        public void onClick(View view) {
+                            clickListener.onClick(Event.buildEventUri(rowID));
+                        }
+                    }
+            );
         }
 
         public void setRowID(long rowID) {
@@ -54,9 +51,11 @@ public class EventsAdapter
     }
 
     private final EventClickListener clickListener;
+    private final Context mContext;
     private Cursor cursor = null;
 
-    public EventsAdapter(EventClickListener eventClickListener) {
+    public EventsAdapter(Context mContext, EventClickListener eventClickListener) {
+        this.mContext = mContext;
         this.clickListener = eventClickListener;
     }
 
@@ -72,51 +71,11 @@ public class EventsAdapter
     @Override
     public void onBindViewHolder(final EventViewHolder holder, int position) {
         cursor.moveToPosition(position);
-        holder.setRowID(cursor.getLong(cursor.getColumnIndex(EventDatabaseContract.Event._ID)));
-        holder.title.setText(cursor.getString(cursor.getColumnIndex(EventDatabaseContract.Event.COLUMN_TITLE)));
-        holder.description.setText(cursor.getString(cursor.getColumnIndex(EventDatabaseContract.Event.COLUMN_DESCRIPTION)));
-        holder.moneyLeft.setText(cursor.getString(cursor.getColumnIndex(EventDatabaseContract.Event.COLUMN_MONEY_LEFT)));
-        holder.numberOfPeopleSignedUp.setText(cursor.getString(cursor.getColumnIndex(EventDatabaseContract.Event.COLUMN_PEOPLE_SIGNED_UP)));
+        holder.setRowID(cursor.getLong(cursor.getColumnIndex(Event._ID)));
+        holder.title.setText(cursor.getString(cursor.getColumnIndex(Event.COLUMN_TITLE)));
+        holder.description.setText(cursor.getString(cursor.getColumnIndex(Event.COLUMN_DESCRIPTION)));
     }
 
-    //TODO: add this fucking menu later
-//    private void showPopupMenu(View view) {
-//        PopupMenu popupMenu = new PopupMenu(mContext,
-//                                            view);
-//        MenuInflater inflater = popupMenu.getMenuInflater();
-//        inflater.inflate(R.menu.menu_event,
-//                         popupMenu.getMenu());
-//        popupMenu.setOnMenuItemClickListener(new EventMenuItemClickListener());
-//        popupMenu.show();
-//    }
-//
-//    class EventMenuItemClickListener implements PopupMenu.OnMenuItemClickListener {
-//
-//        @Override
-//        public boolean onMenuItemClick(MenuItem item) {
-//            switch (item.getItemId()) {
-//                case R.id.action_delete_event:
-//                    Toast.makeText(mContext,
-//                                   R.string.message_not_implemented,
-//                                   Toast.LENGTH_SHORT).show();
-//                    break;
-//                case R.id.action_show_event:
-//                    Toast.makeText(mContext,
-//                                   R.string.message_not_implemented,
-//                                   Toast.LENGTH_SHORT).show();
-//                    break;
-//                case R.id.action_statistics:
-//                    Toast.makeText(mContext,
-//                                   R.string.message_not_implemented,
-//                                   Toast.LENGTH_SHORT).show();
-//                    break;
-//                default:
-//                    throw new UnsupportedOperationException("Menu item not recognized");
-//            }
-//            return true;
-//        }
-//
-//    }
 
     @Override
     public int getItemCount() {
