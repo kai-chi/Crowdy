@@ -44,10 +44,6 @@ public class EventsFragment extends Fragment
 
     private EventsAdapter eventsAdapter;
 
-    public EventsFragment() {
-        // Required empty public constructor
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -64,7 +60,7 @@ public class EventsFragment extends Fragment
         RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity().getBaseContext()));
 
-        eventsAdapter = new EventsAdapter(getContext(), new EventsAdapter.EventClickListener() {
+        eventsAdapter = new EventsAdapter(new EventsAdapter.EventClickListener() {
 
             @Override
             public void onClick(Uri eventUri) {
@@ -135,7 +131,7 @@ public class EventsFragment extends Fragment
                                         null,
                                         null,
                                         null,
-                                        EventDatabaseContract.Event.COLUMN_TITLE + " COLLATE NOCASE ASC");
+                                        EventDatabaseContract.Event.COLUMN_TITLE); // + " COLLATE NOCASE ASC");
             default:
                 return null;
         }

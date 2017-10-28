@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               xmlns:app="http://schemas.android.com/apk/res-auto"
-              android:orientation="vertical"
               android:layout_width="match_parent"
-              android:layout_height="wrap_content">
+              android:layout_height="wrap_content"
+              android:orientation="vertical">
 
     <android.support.v7.widget.CardView
         android:id="@+id/surveyCardView"
@@ -14,9 +14,11 @@
         android:background="@color/colorLightPrimaryColor"
         android:clickable="true"
         android:elevation="@dimen/event_card_elevation"
-        app:cardCornerRadius="@dimen/cardCornerRadius" android:focusable="true">
+        android:focusable="true"
+        app:cardCornerRadius="@dimen/cardCornerRadius">
 
         <RelativeLayout
+            android:id="@+id/cardRelativeLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/colorLightPrimaryColor">
@@ -41,7 +43,6 @@
                 android:layout_gravity="center"
                 android:layout_marginLeft="@dimen/event_title_padding"
                 android:layout_marginRight="@dimen/event_title_padding"
-                android:hint="@string/event_description_hint"
                 android:lines="3"
                 android:textColor="@color/colorSecondaryText"/>
 

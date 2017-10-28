@@ -1,12 +1,12 @@
 package kaichi.crowdy;
 
-import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import kaichi.crowdy.database.EventDatabaseContract.Event;
@@ -24,16 +24,18 @@ public class EventsAdapter
     }
 
     public class EventViewHolder extends ViewHolder {
-        public final TextView title;
-        public final TextView description;
+        private final TextView title;
+        private final TextView description;
         private long rowID;
+        private final RelativeLayout relativeLayout;
 
         public EventViewHolder(final View itemView) {
             super(itemView);
             title = itemView.findViewById(R.id.eventTitleTextView);
             description = itemView.findViewById(R.id.eventDescriptionTextView);
+            relativeLayout = itemView.findViewById(R.id.cardRelativeLayout);
 
-            itemView.setOnClickListener(
+            relativeLayout.setOnClickListener(
                     new View.OnClickListener() {
 
                         @Override
@@ -44,18 +46,15 @@ public class EventsAdapter
             );
         }
 
-        public void setRowID(long rowID) {
+        private void setRowID(long rowID) {
             this.rowID = rowID;
         }
-
     }
 
     private final EventClickListener clickListener;
-    private final Context mContext;
     private Cursor cursor = null;
 
-    public EventsAdapter(Context mContext, EventClickListener eventClickListener) {
-        this.mContext = mContext;
+    public EventsAdapter(EventClickListener eventClickListener) {
         this.clickListener = eventClickListener;
     }
 
