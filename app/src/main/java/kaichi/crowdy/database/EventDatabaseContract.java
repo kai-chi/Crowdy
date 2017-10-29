@@ -22,8 +22,8 @@ public class EventDatabaseContract {
 
         public static final String COLUMN_TITLE = "title";
         public static final String COLUMN_DESCRIPTION = "description";
-        public static final String COLUMN_MONEY_LEFT = "moneyLeft";
-        public static final String COLUMN_PEOPLE_SIGNED_UP = "numberOfPeopleSignedUp";
+        public static final String COLUMN_CREATION_TIMESTAMP = "creationTimestamp";
+        public static final String COLUMN_COLOR = "color";
 
 
         //create a Uri for a specific event

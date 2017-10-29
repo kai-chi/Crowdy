@@ -6,16 +6,20 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
+import com.jaredrummler.android.colorpicker.ColorPickerDialogListener;
+
 public class MainActivity extends AppCompatActivity
         implements EventsFragment.EventsFragmentListener,
         AddEventFragment.AddEventFragmentListener,
-        DetailFragment.DetailFragmentListener {
+        DetailFragment.DetailFragmentListener,
+        ColorPickerDialogListener {
 
     // key for storing a event's Uri in a Bundle passed to a fragment
     public static final String EVENT_URI = "event_uri";
 
 
     private EventsFragment eventsFragment;
+    private AddEventFragment addEventFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,7 +88,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void displayAddEventFragment(int viewID, Uri eventUri) {
-        AddEventFragment addEventFragment = new AddEventFragment();
+        addEventFragment = new AddEventFragment();
 
         //if editing existing contact pass Uri in argument 2
         if (eventUri != null) {
@@ -125,6 +129,16 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onEditEvent(Uri eventUri) {
+
+    }
+
+    @Override
+    public void onColorSelected(int dialogId, int color) {
+        addEventFragment.setEventColor(color);
+    }
+
+    @Override
+    public void onDialogDismissed(int dialogId) {
 
     }
 }

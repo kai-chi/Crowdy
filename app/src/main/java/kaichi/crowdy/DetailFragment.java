@@ -3,6 +3,7 @@ package kaichi.crowdy;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.drawable.GradientDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -16,6 +17,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import static kaichi.crowdy.database.EventDatabaseContract.Event;
@@ -40,6 +42,7 @@ public class DetailFragment extends Fragment
 
     private TextView titleTextView;
     private TextView descriptionTextView;
+    private LinearLayout linearLayout;
 
     @Override
     public void onAttach(Context context) {
@@ -73,7 +76,7 @@ public class DetailFragment extends Fragment
 
         titleTextView = view.findViewById(R.id.titleTextView);
         descriptionTextView = view.findViewById(R.id.descriptionTextView);
-
+        linearLayout = view.findViewById(R.id.fragmentDetailLinearLayout);
         getLoaderManager().initLoader(EVENT_LOADER,
                                       null,
                                       this);
@@ -137,9 +140,13 @@ public class DetailFragment extends Fragment
         if (cursor != null && cursor.moveToFirst()) {
             int titleIndex = cursor.getColumnIndex(Event.COLUMN_TITLE);
             int descriptionIndex = cursor.getColumnIndex(Event.COLUMN_DESCRIPTION);
+            int colorIndex = cursor.getColumnIndex(Event.COLUMN_COLOR);
 
             titleTextView.setText(cursor.getString(titleIndex));
             descriptionTextView.setText(cursor.getString(descriptionIndex));
+//            linearLayout.setBackgroundColor(cursor.getInt(colorIndex));
+            GradientDrawable gd = (GradientDrawable) (linearLayout.getBackground()).getCurrent();
+            gd.setColor(cursor.getInt(colorIndex));
         }
     }
 

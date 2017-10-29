@@ -44,6 +44,25 @@
 
             </android.support.design.widget.TextInputLayout>
 
+            <TextView
+                android:id="@+id/colorTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/rounded_corner"
+                android:gravity="center"
+                android:paddingBottom="@dimen/event_title_padding"
+                android:paddingTop="@dimen/event_title_padding"
+                android:text="@string/select_color"
+                android:textColor="@android:color/black"
+                android:textSize="@dimen/event_title_size"/>
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/event_card_margin"/>
+
             <Button
                 android:id="@+id/saveButton"
                 style="@style/Widget.AppCompat.Button.Colored"

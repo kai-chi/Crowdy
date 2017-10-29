@@ -131,7 +131,7 @@ public class EventsFragment extends Fragment
                                         null,
                                         null,
                                         null,
-                                        EventDatabaseContract.Event.COLUMN_TITLE); // + " COLLATE NOCASE ASC");
+                                        EventDatabaseContract.Event.COLUMN_CREATION_TIMESTAMP + " COLLATE NOCASE DESC");
             default:
                 return null;
         }

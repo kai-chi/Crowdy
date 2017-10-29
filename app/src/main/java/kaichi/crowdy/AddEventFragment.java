@@ -4,6 +4,7 @@ package kaichi.crowdy;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
@@ -13,6 +14,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v4.content.res.ResourcesCompat;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -20,6 +22,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.TextView;
+
+import com.jaredrummler.android.colorpicker.ColorPickerDialog;
 
 import static kaichi.crowdy.database.EventDatabaseContract.Event;
 
@@ -37,15 +42,14 @@ public class AddEventFragment extends Fragment
     }
 
     private static final int EVENT_LOADER = 0;
-
     private AddEventFragmentListener listener;
     private Uri eventUri;
     private boolean addingNewEvent = true;
-
     private TextInputLayout titleTextInputLayout;
     private TextInputLayout descriptionTextInputLayout;
+    private TextView colorTextView;
+    private int color;
     private Button saveButton;
-
     private CoordinatorLayout coordinatorLayout;
 
     @Override
@@ -74,6 +78,17 @@ public class AddEventFragment extends Fragment
         titleTextInputLayout = view.findViewById(R.id.titleTextInputLayout);
         titleTextInputLayout.getEditText().addTextChangedListener(titleChangedListener);
         descriptionTextInputLayout = view.findViewById(R.id.descriptionTextInputLayout);
+        colorTextView = view.findViewById(R.id.colorTextView);
+        setEventColor(ResourcesCompat.getColor(getResources(), R.color.colorLightPrimaryColor, null));
+        colorTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ((InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE))
+                        .hideSoftInputFromWindow(getView().getWindowToken(),
+                                                 0);
+                ColorPickerDialog.newBuilder().setShowAlphaSlider(true).show(getActivity());
+            }
+        });
 
         saveButton = view.findViewById(R.id.saveButton);
         saveButton.setOnClickListener(saveEventButtonClicked);
@@ -140,14 +155,13 @@ public class AddEventFragment extends Fragment
                           titleTextInputLayout.getEditText().getText().toString());
         contentValues.put(Event.COLUMN_DESCRIPTION,
                           descriptionTextInputLayout.getEditText().getText().toString());
+        contentValues.put(Event.COLUMN_COLOR,
+                          color);
 
         if (addingNewEvent) {
             Uri newEventUri = getActivity().getContentResolver().insert(Event.CONTENT_URI,
                                                                         contentValues);
             if (newEventUri != null) {
-                Snackbar.make(coordinatorLayout,
-                              getString(R.string.add_event_success),
-                              Snackbar.LENGTH_LONG).show();
                 listener.onAddEventCompleted(newEventUri);
             } else {
                 Snackbar.make(coordinatorLayout,
@@ -203,5 +217,21 @@ public class AddEventFragment extends Fragment
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
 
+    }
+
+    public void setEventColor(int color) {
+        setColor(color);
+        colorTextView.setBackgroundColor(color);
+        colorTextView.setTextColor(getContrastColor(color));
+    }
+
+    private void setColor(int color) {
+        this.color = color;
+    }
+
+    private int getContrastColor(int color) {
+        int red = Color.red(color);
+        double y = (299 * (int) Color.red(color) + 587 * (int) Color.green(color) + 114 * (int) Color.blue(color)) / 1000;
+        return y >= 128 ? Color.BLACK : Color.WHITE;
     }
 }

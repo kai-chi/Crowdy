@@ -34,7 +34,6 @@ public class EventsAdapter
             title = itemView.findViewById(R.id.eventTitleTextView);
             description = itemView.findViewById(R.id.eventDescriptionTextView);
             relativeLayout = itemView.findViewById(R.id.cardRelativeLayout);
-
             relativeLayout.setOnClickListener(
                     new View.OnClickListener() {
 
@@ -48,6 +47,10 @@ public class EventsAdapter
 
         private void setRowID(long rowID) {
             this.rowID = rowID;
+        }
+
+        private void setColor(int color) {
+            relativeLayout.setBackgroundColor(color);
         }
     }
 
@@ -73,6 +76,7 @@ public class EventsAdapter
         holder.setRowID(cursor.getLong(cursor.getColumnIndex(Event._ID)));
         holder.title.setText(cursor.getString(cursor.getColumnIndex(Event.COLUMN_TITLE)));
         holder.description.setText(cursor.getString(cursor.getColumnIndex(Event.COLUMN_DESCRIPTION)));
+        holder.setColor(cursor.getInt(cursor.getColumnIndex(Event.COLUMN_COLOR)));
     }
 
 

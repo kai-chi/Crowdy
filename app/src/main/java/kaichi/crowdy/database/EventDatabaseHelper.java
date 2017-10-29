@@ -17,8 +17,8 @@ public class EventDatabaseHelper extends SQLiteOpenHelper {
                     Event._ID + " INTEGER PRIMARY KEY," +
                     Event.COLUMN_TITLE + " TEXT," +
                     Event.COLUMN_DESCRIPTION + " TEXT," +
-                    Event.COLUMN_MONEY_LEFT + " REAL," +
-                    Event.COLUMN_PEOPLE_SIGNED_UP + " INTEGER)";
+                    Event.COLUMN_CREATION_TIMESTAMP + " TIMESTAMP DEFAULT CURRENT_TIMESTAMP," +
+                    Event.COLUMN_COLOR + " INTEGER)";
 
     private static final String SQL_DELETE_ENTRIES =
             "DROP TABLE IF EXISTS " + Event.TABLE_NAME;

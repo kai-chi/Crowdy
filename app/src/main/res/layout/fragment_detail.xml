@@ -7,10 +7,13 @@
     tools:context="kaichi.crowdy.DetailFragment">
 
     <LinearLayout
+        android:id="@+id/fragmentDetailLinearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorLightPrimaryColor"
-        android:orientation="vertical">
+        android:layout_margin="@dimen/cpv_required_padding"
+        android:background="@drawable/rounded_corner"
+        android:orientation="vertical"
+        android:paddingBottom="6dp">
 
 
         <TextView
