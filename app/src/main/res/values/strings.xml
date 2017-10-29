@@ -24,4 +24,6 @@
     <string name="add_event_error">Error while adding event</string>
     <string name="event_updated">Event updated</string>
     <string name="event_update_error">Error while updating event</string>
+    <string name="color_label">Color</string>
+    <string name="select_color">Click to pick a color</string>
 </resources>
