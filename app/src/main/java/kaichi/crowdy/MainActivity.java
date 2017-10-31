@@ -4,7 +4,9 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 
 import com.jaredrummler.android.colorpicker.ColorPickerDialogListener;
 
@@ -12,7 +14,8 @@ public class MainActivity extends AppCompatActivity
         implements EventsFragment.EventsFragmentListener,
         AddEventFragment.AddEventFragmentListener,
         DetailFragment.DetailFragmentListener,
-        ColorPickerDialogListener {
+        ColorPickerDialogListener,
+        RecyclerViewItemTouchHelper.RecyclerViewItemTouchHelperListener {
 
     // key for storing a event's Uri in a Bundle passed to a fragment
     public static final String EVENT_URI = "event_uri";
@@ -140,5 +143,10 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onDialogDismissed(int dialogId) {
 
+    }
+
+    @Override
+    public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction, int position) {
+        Log.i("Main", "swiped");
     }
 }

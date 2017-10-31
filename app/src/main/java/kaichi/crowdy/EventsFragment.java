@@ -76,6 +76,13 @@ public class EventsFragment extends Fragment
                                                                      dpToPx(1),
                                                                      true));
 
+//        ItemTouchHelper.SimpleCallback itemTouchHelperCallback =
+//                new RecyclerViewItemTouchHelper(0,
+//                                                ItemTouchHelper.LEFT,
+//                                                getContext());
+//
+//        new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(recyclerView);
+
         FloatingActionButton addButton = view.findViewById(R.id.addEventFloatingActionButton);
         addButton.setOnClickListener(new View.OnClickListener() {
 

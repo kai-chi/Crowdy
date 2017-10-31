@@ -1,12 +1,15 @@
 package kaichi.crowdy;
 
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.drawable.GradientDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
+import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
@@ -18,7 +21,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import static kaichi.crowdy.database.EventDatabaseContract.Event;
 
@@ -40,9 +42,11 @@ public class DetailFragment extends Fragment
     private DetailFragmentListener listener;
     private Uri eventUri;
 
-    private TextView titleTextView;
-    private TextView descriptionTextView;
+    private TextInputEditText detailTitleTextView;
+    private TextInputEditText detailDescriptionTextView;
     private LinearLayout linearLayout;
+
+    private boolean deleteEvent = false;
 
     @Override
     public void onAttach(Context context) {
@@ -74,8 +78,8 @@ public class DetailFragment extends Fragment
                                  container,
                                  false);
 
-        titleTextView = view.findViewById(R.id.titleTextView);
-        descriptionTextView = view.findViewById(R.id.descriptionTextView);
+        detailTitleTextView = view.findViewById(R.id.detailTitleInputEditText);
+        detailDescriptionTextView = view.findViewById(R.id.detailDescriptionInputEditText);
         linearLayout = view.findViewById(R.id.fragmentDetailLinearLayout);
         getLoaderManager().initLoader(EVENT_LOADER,
                                       null,
@@ -109,9 +113,34 @@ public class DetailFragment extends Fragment
                 null,
                 null
         );
+        deleteEvent = true;
         listener.onEventDeleted();
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (!deleteEvent) {
+            ContentValues contentValues = new ContentValues();
+            contentValues.put(Event.COLUMN_TITLE,
+                              detailTitleTextView.getText().toString());
+            contentValues.put(Event.COLUMN_DESCRIPTION,
+                              detailDescriptionTextView.getText().toString());
+
+            int updatedRows = getActivity().getContentResolver().update(eventUri,
+                                                                        contentValues,
+                                                                        null,
+                                                                        null);
+            if (updatedRows <= 0) {
+                Snackbar.make(linearLayout,
+                              R.string.event_update_error,
+                              Snackbar.LENGTH_LONG).show();
+            }
+
+            getActivity().getSupportFragmentManager().popBackStack();
+
+        }
+    }
 
     @Override
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
@@ -142,8 +171,8 @@ public class DetailFragment extends Fragment
             int descriptionIndex = cursor.getColumnIndex(Event.COLUMN_DESCRIPTION);
             int colorIndex = cursor.getColumnIndex(Event.COLUMN_COLOR);
 
-            titleTextView.setText(cursor.getString(titleIndex));
-            descriptionTextView.setText(cursor.getString(descriptionIndex));
+            detailTitleTextView.setText(cursor.getString(titleIndex));
+            detailDescriptionTextView.setText(cursor.getString(descriptionIndex));
 //            linearLayout.setBackgroundColor(cursor.getInt(colorIndex));
             GradientDrawable gd = (GradientDrawable) (linearLayout.getBackground()).getCurrent();
             gd.setColor(cursor.getInt(colorIndex));
