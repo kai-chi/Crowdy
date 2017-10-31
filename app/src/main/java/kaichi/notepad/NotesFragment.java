@@ -1,4 +1,4 @@
-package kaichi.crowdy;
+package kaichi.notepad;
 
 
 import android.content.Context;
@@ -19,30 +19,30 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import kaichi.crowdy.database.EventDatabaseContract;
+import kaichi.notepad.database.NoteDatabaseContract;
 
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class EventsFragment extends Fragment
+public class NotesFragment extends Fragment
         implements LoaderManager.LoaderCallbacks<Cursor> {
 
-    public interface EventsFragmentListener {
+    public interface NotesFragmentListener {
 
-        //called when event selected
-        void onEventSelected(Uri eventUri);
+        //called when note selected
+        void onNoteSelected(Uri noteUri);
 
         //called when add button pressed
-        void onAddEvent();
+        void onAddNote();
 
     }
 
-    private static final int EVENTS_LOADER = 0;
+    private static final int NOTES_LOADER = 0;
 
-    private EventsFragmentListener listener;
+    private NotesFragmentListener listener;
 
-    private EventsAdapter eventsAdapter;
+    private NotesAdapter notesAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -53,22 +53,22 @@ public class EventsFragment extends Fragment
 
         setHasOptionsMenu(true);
 
-        View view = inflater.inflate(R.layout.fragment_events,
+        View view = inflater.inflate(R.layout.fragment_notes,
                                      container,
                                      false);
 
         RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity().getBaseContext()));
 
-        eventsAdapter = new EventsAdapter(new EventsAdapter.EventClickListener() {
+        notesAdapter = new NotesAdapter(new NotesAdapter.NoteClickListener() {
 
             @Override
-            public void onClick(Uri eventUri) {
-                listener.onEventSelected(eventUri);
+            public void onClick(Uri noteUri) {
+                listener.onNoteSelected(noteUri);
             }
         });
 
-        recyclerView.setAdapter(eventsAdapter);
+        recyclerView.setAdapter(notesAdapter);
 
         //added to improve performance - maybe to remove later as the size may vary
         recyclerView.setHasFixedSize(true);
@@ -76,19 +76,12 @@ public class EventsFragment extends Fragment
                                                                      dpToPx(1),
                                                                      true));
 
-//        ItemTouchHelper.SimpleCallback itemTouchHelperCallback =
-//                new RecyclerViewItemTouchHelper(0,
-//                                                ItemTouchHelper.LEFT,
-//                                                getContext());
-//
-//        new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(recyclerView);
-
-        FloatingActionButton addButton = view.findViewById(R.id.addEventFloatingActionButton);
+        FloatingActionButton addButton = view.findViewById(R.id.addNoteFloatingActionButton);
         addButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                listener.onAddEvent();
+                listener.onAddNote();
             }
         });
 
@@ -102,14 +95,14 @@ public class EventsFragment extends Fragment
                                                     r.getDisplayMetrics()));
     }
 
-    //set EventsFragmentListener when fragment attached
+    //set NotesFragmentListener when fragment attached
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        listener = (EventsFragmentListener) context;
+        listener = (NotesFragmentListener) context;
     }
 
-    //remove EventsFragmentListener when fragment detached
+    //remove NotesFragmentListener when fragment detached
     @Override
     public void onDetach() {
         super.onDetach();
@@ -119,26 +112,26 @@ public class EventsFragment extends Fragment
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        getLoaderManager().initLoader(EVENTS_LOADER,
+        getLoaderManager().initLoader(NOTES_LOADER,
                                       null,
                                       this);
     }
 
     //called from MainActivity when DB updated
-    public void updateEventList() {
-        eventsAdapter.notifyDataSetChanged();
+    public void updateNoteList() {
+        notesAdapter.notifyDataSetChanged();
     }
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         switch (id) {
-            case EVENTS_LOADER:
+            case NOTES_LOADER:
                 return new CursorLoader(getActivity(),
-                                        EventDatabaseContract.Event.CONTENT_URI,
+                                        NoteDatabaseContract.Note.CONTENT_URI,
                                         null,
                                         null,
                                         null,
-                                        EventDatabaseContract.Event.COLUMN_CREATION_TIMESTAMP + " COLLATE NOCASE DESC");
+                                        NoteDatabaseContract.Note.COLUMN_CREATION_TIMESTAMP + " COLLATE NOCASE DESC");
             default:
                 return null;
         }
@@ -146,11 +139,11 @@ public class EventsFragment extends Fragment
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        eventsAdapter.swapCursor(data);
+        notesAdapter.swapCursor(data);
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-        eventsAdapter.swapCursor(null);
+        notesAdapter.swapCursor(null);
     }
 }

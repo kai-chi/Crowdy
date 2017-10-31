@@ -1,32 +1,32 @@
-package kaichi.crowdy.database;
+package kaichi.notepad.database;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import kaichi.crowdy.database.EventDatabaseContract.Event;
+import kaichi.notepad.database.NoteDatabaseContract.Note;
 
 /**
  * Created by kaichi on 16.10.17.
  */
 
-public class EventDatabaseHelper extends SQLiteOpenHelper {
+public class NoteDatabaseHelper extends SQLiteOpenHelper {
 
     private static final String SQL_CREATE_ENTRIES =
-            "CREATE TABLE " + Event.TABLE_NAME + " (" +
-                    Event._ID + " INTEGER PRIMARY KEY," +
-                    Event.COLUMN_TITLE + " TEXT," +
-                    Event.COLUMN_DESCRIPTION + " TEXT," +
-                    Event.COLUMN_CREATION_TIMESTAMP + " TIMESTAMP DEFAULT CURRENT_TIMESTAMP," +
-                    Event.COLUMN_COLOR + " INTEGER)";
+            "CREATE TABLE " + Note.TABLE_NAME + " (" +
+                    Note._ID + " INTEGER PRIMARY KEY," +
+                    Note.COLUMN_TITLE + " TEXT," +
+                    Note.COLUMN_DESCRIPTION + " TEXT," +
+                    Note.COLUMN_CREATION_TIMESTAMP + " TIMESTAMP DEFAULT CURRENT_TIMESTAMP," +
+                    Note.COLUMN_COLOR + " INTEGER)";
 
     private static final String SQL_DELETE_ENTRIES =
-            "DROP TABLE IF EXISTS " + Event.TABLE_NAME;
+            "DROP TABLE IF EXISTS " + Note.TABLE_NAME;
 
     public static final int DATABASE_VERSION = 1;
-    public static final String DATABASE_NAME = "Crowdy.db";
+    public static final String DATABASE_NAME = "Notepad.db";
 
-    public EventDatabaseHelper(Context context) {
+    public NoteDatabaseHelper(Context context) {
         super(context,
               DATABASE_NAME,
               null,

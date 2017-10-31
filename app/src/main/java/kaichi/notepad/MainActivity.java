@@ -1,28 +1,25 @@
-package kaichi.crowdy;
+package kaichi.notepad;
 
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 
 import com.jaredrummler.android.colorpicker.ColorPickerDialogListener;
 
 public class MainActivity extends AppCompatActivity
-        implements EventsFragment.EventsFragmentListener,
-        AddEventFragment.AddEventFragmentListener,
+        implements NotesFragment.NotesFragmentListener,
+        AddNoteFragment.AddNoteFragmentListener,
         DetailFragment.DetailFragmentListener,
-        ColorPickerDialogListener,
-        RecyclerViewItemTouchHelper.RecyclerViewItemTouchHelperListener {
+        ColorPickerDialogListener {
 
-    // key for storing a event's Uri in a Bundle passed to a fragment
-    public static final String EVENT_URI = "event_uri";
+    // key for storing a note's Uri in a Bundle passed to a fragment
+    public static final String NOTE_URI = "note_uri";
 
 
-    private EventsFragment eventsFragment;
-    private AddEventFragment addEventFragment;
+    private NotesFragment notesFragment;
+    private AddNoteFragment addNoteFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,16 +29,16 @@ public class MainActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
 
         //if layout contains fragment_container, the phone layout is in use
-        //create and display am EventsFragment
+        //create and display am NotesFragment
         if (savedInstanceState == null &&
                 findViewById(R.id.fragment_container) != null) {
-            eventsFragment = new EventsFragment();
+            notesFragment = new NotesFragment();
 
             //add the fragment to the FrameLayout
             FragmentTransaction transaction =
                     getSupportFragmentManager().beginTransaction();
             transaction.add(R.id.fragment_container,
-                            eventsFragment);
+                            notesFragment);
             transaction.commit();
         } else {
             //TODO: add support for bigger screens
@@ -49,24 +46,24 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void onEventSelected(Uri eventUri) {
+    public void onNoteSelected(Uri noteUri) {
         if (findViewById(R.id.fragment_container) != null) { //phone
-            displayEvent(eventUri,
-                         R.id.fragment_container);
+            displayNote(noteUri,
+                        R.id.fragment_container);
         } else { //tablet
             getSupportFragmentManager().popBackStack();
             //TODO: change the id to different container
-            displayEvent(eventUri,
-                         R.id.fragment_container);
+            displayNote(noteUri,
+                        R.id.fragment_container);
         }
     }
 
-    private void displayEvent(Uri eventUri, int viewID) {
+    private void displayNote(Uri noteUri, int viewID) {
         DetailFragment detailFragment = new DetailFragment();
 
         Bundle arguments = new Bundle();
-        arguments.putParcelable(EVENT_URI,
-                                eventUri);
+        arguments.putParcelable(NOTE_URI,
+                                noteUri);
         detailFragment.setArguments(arguments);
 
         FragmentTransaction transaction =
@@ -77,76 +74,71 @@ public class MainActivity extends AppCompatActivity
         transaction.commit();
     }
 
-    //display AddEventFragment to add new event
+    //display AddNoteFragment to add new note
     @Override
-    public void onAddEvent() {
+    public void onAddNote() {
         if (findViewById(R.id.fragment_container) != null) { //phone
-            displayAddEventFragment(R.id.fragment_container,
-                                    null);
+            displayAddNoteFragment(R.id.fragment_container,
+                                   null);
         } else { //tablet
             //TODO: change container for tablet
-            displayAddEventFragment(R.id.fragment_container,
-                                    null);
+            displayAddNoteFragment(R.id.fragment_container,
+                                   null);
         }
     }
 
-    private void displayAddEventFragment(int viewID, Uri eventUri) {
-        addEventFragment = new AddEventFragment();
+    private void displayAddNoteFragment(int viewID, Uri noteUri) {
+        addNoteFragment = new AddNoteFragment();
 
         //if editing existing contact pass Uri in argument 2
-        if (eventUri != null) {
+        if (noteUri != null) {
             Bundle arguments = new Bundle();
-            arguments.putParcelable(EVENT_URI,
-                                    eventUri);
-            addEventFragment.setArguments(arguments);
+            arguments.putParcelable(NOTE_URI,
+                                    noteUri);
+            addNoteFragment.setArguments(arguments);
         }
 
         FragmentTransaction transaction =
                 getSupportFragmentManager().beginTransaction();
         transaction.replace(viewID,
-                            addEventFragment);
+                            addNoteFragment);
         transaction.addToBackStack(null);
         transaction.commit();
     }
 
 
     @Override
-    public void onAddEventCompleted(Uri eventUri) {
+    public void onAddNoteCompleted(Uri noteUri) {
         getSupportFragmentManager().popBackStack();
-        eventsFragment.updateEventList();
+        notesFragment.updateNoteList();
 
         if (findViewById(R.id.fragment_container) == null) { //tablet
             getSupportFragmentManager().popBackStack();
 
             //TODO: change container
-            displayEvent(eventUri,
-                         R.id.fragment_container);
+            displayNote(noteUri,
+                        R.id.fragment_container);
         }
     }
 
     @Override
-    public void onEventDeleted() {
+    public void onNoteDeleted() {
         getSupportFragmentManager().popBackStack();
-        eventsFragment.updateEventList();
+        notesFragment.updateNoteList();
     }
 
     @Override
-    public void onEditEvent(Uri eventUri) {
+    public void onEditNote(Uri noteUri) {
 
     }
 
     @Override
     public void onColorSelected(int dialogId, int color) {
-        addEventFragment.setEventColor(color);
+        addNoteFragment.setNoteColor(color);
     }
 
     @Override
     public void onDialogDismissed(int dialogId) {
 
-    }
-
-    @Override
-    public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction, int position) {
-        Log.i("Main", "swiped");
     }
 }

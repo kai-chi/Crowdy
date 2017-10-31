@@ -1,4 +1,4 @@
-package kaichi.crowdy;
+package kaichi.notepad;
 
 import org.junit.Test;
 

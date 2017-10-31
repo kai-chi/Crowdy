@@ -1,4 +1,4 @@
-package kaichi.crowdy;
+package kaichi.notepad;
 
 import android.database.Cursor;
 import android.net.Uri;
@@ -9,37 +9,37 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import kaichi.crowdy.database.EventDatabaseContract.Event;
+import kaichi.notepad.database.NoteDatabaseContract.Note;
 
 import static android.support.v7.widget.RecyclerView.ViewHolder;
 
 
-public class EventsAdapter
-        extends RecyclerView.Adapter<EventsAdapter.EventViewHolder> {
+public class NotesAdapter
+        extends RecyclerView.Adapter<NotesAdapter.NoteViewHolder> {
 
-    //interface implemented by EventsFragment to respond
+    //interface implemented by NotesFragment to respond
     //when the user touches an item in the RecycerView
-    public interface EventClickListener {
-        void onClick(Uri eventUri);
+    public interface NoteClickListener {
+        void onClick(Uri noteUri);
     }
 
-    public class EventViewHolder extends ViewHolder {
+    public class NoteViewHolder extends ViewHolder {
         private final TextView title;
         private final TextView description;
         private long rowID;
         private final RelativeLayout relativeLayout;
 
-        public EventViewHolder(final View itemView) {
+        public NoteViewHolder(final View itemView) {
             super(itemView);
-            title = itemView.findViewById(R.id.eventTitleTextView);
-            description = itemView.findViewById(R.id.eventDescriptionTextView);
+            title = itemView.findViewById(R.id.noteTitleTextView);
+            description = itemView.findViewById(R.id.noteDescriptionTextView);
             relativeLayout = itemView.findViewById(R.id.cardRelativeLayout);
             relativeLayout.setOnClickListener(
                     new View.OnClickListener() {
 
                         @Override
                         public void onClick(View view) {
-                            clickListener.onClick(Event.buildEventUri(rowID));
+                            clickListener.onClick(Note.buildNoteUri(rowID));
                         }
                     }
             );
@@ -54,29 +54,29 @@ public class EventsAdapter
         }
     }
 
-    private final EventClickListener clickListener;
+    private final NoteClickListener clickListener;
     private Cursor cursor = null;
 
-    public EventsAdapter(EventClickListener eventClickListener) {
-        this.clickListener = eventClickListener;
+    public NotesAdapter(NoteClickListener noteClickListener) {
+        this.clickListener = noteClickListener;
     }
 
     @Override
-    public EventViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public NoteViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                                  .inflate(R.layout.event_card,
+                                  .inflate(R.layout.note_card,
                                            parent,
                                            false);
-        return new EventViewHolder(view);
+        return new NoteViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(final EventViewHolder holder, int position) {
+    public void onBindViewHolder(final NoteViewHolder holder, int position) {
         cursor.moveToPosition(position);
-        holder.setRowID(cursor.getLong(cursor.getColumnIndex(Event._ID)));
-        holder.title.setText(cursor.getString(cursor.getColumnIndex(Event.COLUMN_TITLE)));
-        holder.description.setText(cursor.getString(cursor.getColumnIndex(Event.COLUMN_DESCRIPTION)));
-        holder.setColor(cursor.getInt(cursor.getColumnIndex(Event.COLUMN_COLOR)));
+        holder.setRowID(cursor.getLong(cursor.getColumnIndex(Note._ID)));
+        holder.title.setText(cursor.getString(cursor.getColumnIndex(Note.COLUMN_TITLE)));
+        holder.description.setText(cursor.getString(cursor.getColumnIndex(Note.COLUMN_DESCRIPTION)));
+        holder.setColor(cursor.getInt(cursor.getColumnIndex(Note.COLUMN_COLOR)));
     }
 
 

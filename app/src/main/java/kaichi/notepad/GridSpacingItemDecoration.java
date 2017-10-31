@@ -1,4 +1,4 @@
-package kaichi.crowdy;
+package kaichi.notepad;
 
 import android.graphics.Rect;
 import android.support.v7.widget.RecyclerView;

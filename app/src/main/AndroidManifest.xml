@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="kaichi.crowdy">
+          package="kaichi.notepad">
 
     <application
         android:allowBackup="true"
@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name="kaichi.crowdy.MainActivity"
+            android:name="kaichi.notepad.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -21,8 +21,8 @@
         </activity>
 
         <provider
-            android:authorities="kaichi.crowdy.database"
-            android:name=".database.EventContentProvider"
+            android:authorities="kaichi.notepad.database"
+            android:name="kaichi.notepad.database.NoteContentProvider"
             android:enabled="true"
             android:exported="false">
         </provider>

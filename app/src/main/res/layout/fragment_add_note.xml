@@ -2,7 +2,7 @@
              xmlns:tools="http://schemas.android.com/tools"
              android:layout_width="match_parent"
              android:layout_height="match_parent"
-             tools:mContext="kaichi.crowdy.AddEventFragment">
+             tools:mContext="kaichi.notepad.AddNoteFragment">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -53,24 +53,24 @@
                 android:layout_marginTop="8dp"
                 android:background="@drawable/rounded_corner"
                 android:gravity="center"
-                android:paddingBottom="@dimen/event_title_padding"
-                android:paddingTop="@dimen/event_title_padding"
+                android:paddingBottom="@dimen/note_title_padding"
+                android:paddingTop="@dimen/note_title_padding"
                 android:text="@string/select_color"
                 android:textColor="@android:color/black"
-                android:textSize="@dimen/event_title_size"/>
+                android:textSize="@dimen/note_title_size"/>
 
             <Space
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/event_card_margin"/>
+                android:layout_height="@dimen/note_card_margin"/>
 
             <Button
                 android:id="@+id/saveButton"
                 style="@style/Widget.AppCompat.Button.Colored"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:elevation="@dimen/event_card_elevation"
-                android:text="@string/save_event"
-                android:theme="@style/Crowdy.Button"/>
+                android:elevation="@dimen/note_card_elevation"
+                android:text="@string/save_note"
+                android:theme="@style/Notepad.Button"/>
 
 
         </LinearLayout>

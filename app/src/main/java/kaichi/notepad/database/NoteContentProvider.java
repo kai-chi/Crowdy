@@ -1,4 +1,4 @@
-package kaichi.crowdy.database;
+package kaichi.notepad.database;
 
 
 import android.content.ContentProvider;
@@ -12,12 +12,12 @@ import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import kaichi.crowdy.R;
-import kaichi.crowdy.database.EventDatabaseContract.Event;
+import kaichi.notepad.R;
+import kaichi.notepad.database.NoteDatabaseContract.Note;
 
-public class EventContentProvider extends ContentProvider {
+public class NoteContentProvider extends ContentProvider {
 
-    private EventDatabaseHelper mDbHelper;
+    private NoteDatabaseHelper mDbHelper;
 
     private SQLiteDatabase mDb;
 
@@ -26,24 +26,24 @@ public class EventContentProvider extends ContentProvider {
             new UriMatcher(UriMatcher.NO_MATCH);
 
     //constants used with UriMatcher to determine operation to perform
-    private static final int ONE_EVENT = 1; //manipulate one ievent
-    private static final int EVENTS = 2; //manipulate events table
+    private static final int ONE_NOTE = 1; //manipulate one note
+    private static final int NOTES = 2; //manipulate notes table
 
     static {
-        //Uri for EventTOBEREMOVED with specific id (#)
-        uriMatcher.addURI(EventDatabaseContract.AUTHORITY,
-                          Event.TABLE_NAME + "/#",
-                          ONE_EVENT);
 
-        //Uri for Events table
-        uriMatcher.addURI(EventDatabaseContract.AUTHORITY,
-                          Event.TABLE_NAME,
-                          EVENTS);
+        uriMatcher.addURI(NoteDatabaseContract.AUTHORITY,
+                          Note.TABLE_NAME + "/#",
+                          ONE_NOTE);
+
+        //Uri for notes table
+        uriMatcher.addURI(NoteDatabaseContract.AUTHORITY,
+                          Note.TABLE_NAME,
+                          NOTES);
     }
 
     @Override
     public boolean onCreate() {
-        mDbHelper = new EventDatabaseHelper(getContext());
+        mDbHelper = new NoteDatabaseHelper(getContext());
         mDb = mDbHelper.getWritableDatabase();
         return true;
     }
@@ -54,14 +54,14 @@ public class EventContentProvider extends ContentProvider {
     public Cursor query(@NonNull Uri uri, @Nullable String[] projection, @Nullable String selection, @Nullable String[] selectionArgs, @Nullable String sortOrder) {
 
         SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
-        queryBuilder.setTables(Event.TABLE_NAME);
+        queryBuilder.setTables(Note.TABLE_NAME);
 
         switch (uriMatcher.match(uri)) {
-            case ONE_EVENT:
+            case ONE_NOTE:
                 queryBuilder.appendWhere(
-                        Event._ID + "=" + uri.getLastPathSegment());
+                        Note._ID + "=" + uri.getLastPathSegment());
                 break;
-            case EVENTS:
+            case NOTES:
                 break;
             default:
                 throw new UnsupportedOperationException(
@@ -81,21 +81,21 @@ public class EventContentProvider extends ContentProvider {
         return cursor;
     }
 
-    //insert a new event
+    //insert a new note
     @Nullable
     @Override
     public Uri insert(@NonNull Uri uri, @Nullable ContentValues values) {
-        Uri newEventUri = null;
+        Uri newNoteUri = null;
 
         switch (uriMatcher.match(uri)) {
-            case EVENTS:
-                long rowID = mDb.insert(Event.TABLE_NAME,
+            case NOTES:
+                long rowID = mDb.insert(Note.TABLE_NAME,
                                         null,
                                         values);
 
-                //if the event was inserted create an appropriate Uri
+                //if the note was inserted create an appropriate Uri
                 if (rowID > 0) {
-                    newEventUri = Event.buildEventUri(rowID);
+                    newNoteUri = Note.buildNoteUri(rowID);
                     getContext().getContentResolver().notifyChange(uri,
                                                                    null);
                 } else {
@@ -106,7 +106,7 @@ public class EventContentProvider extends ContentProvider {
                 throw new UnsupportedOperationException(getContext().getString(R.string.invalid_query_uri) + uri);
         }
 
-        return newEventUri;
+        return newNoteUri;
     }
 
     @Override
@@ -114,11 +114,11 @@ public class EventContentProvider extends ContentProvider {
         int numbersOfRowsDeleted;
 
         switch (uriMatcher.match(uri)) {
-            case ONE_EVENT:
+            case ONE_NOTE:
                 String id = uri.getLastPathSegment();
 
-                numbersOfRowsDeleted = mDb.delete(Event.TABLE_NAME,
-                                                  Event._ID + "=" + id,
+                numbersOfRowsDeleted = mDb.delete(Note.TABLE_NAME,
+                                                  Note._ID + "=" + id,
                                                   selectionArgs);
                 break;
             default:
@@ -138,12 +138,12 @@ public class EventContentProvider extends ContentProvider {
         int numberOfRowsUpdated;
 
         switch (uriMatcher.match(uri)) {
-            case ONE_EVENT:
+            case ONE_NOTE:
                 String id = uri.getLastPathSegment();
 
-                numberOfRowsUpdated = mDb.update(Event.TABLE_NAME,
+                numberOfRowsUpdated = mDb.update(Note.TABLE_NAME,
                                                  values,
-                                                 Event._ID + "=" + id,
+                                                 Note._ID + "=" + id,
                                                  selectionArgs);
                 break;
             default:

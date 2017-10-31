@@ -1,4 +1,4 @@
-package kaichi.crowdy;
+package kaichi.notepad;
 
 
 import android.content.ContentValues;
@@ -22,7 +22,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
-import static kaichi.crowdy.database.EventDatabaseContract.Event;
+import static kaichi.notepad.database.NoteDatabaseContract.Note;
 
 
 /**
@@ -32,21 +32,21 @@ public class DetailFragment extends Fragment
         implements LoaderManager.LoaderCallbacks<Cursor> {
 
     public interface DetailFragmentListener {
-        void onEventDeleted();
+        void onNoteDeleted();
 
-        void onEditEvent(Uri eventUri);
+        void onEditNote(Uri noteUri);
     }
 
-    private static final int EVENT_LOADER = 0;
+    private static final int NOTE_LOADER = 0;
 
     private DetailFragmentListener listener;
-    private Uri eventUri;
+    private Uri noteUri;
 
     private TextInputEditText detailTitleTextView;
     private TextInputEditText detailDescriptionTextView;
     private LinearLayout linearLayout;
 
-    private boolean deleteEvent = false;
+    private boolean deleteNote = false;
 
     @Override
     public void onAttach(Context context) {
@@ -71,7 +71,7 @@ public class DetailFragment extends Fragment
         Bundle arguments = getArguments();
 
         if (arguments != null)
-            eventUri = arguments.getParcelable(MainActivity.EVENT_URI);
+            noteUri = arguments.getParcelable(MainActivity.NOTE_URI);
 
         View view =
                 inflater.inflate(R.layout.fragment_detail,
@@ -81,7 +81,7 @@ public class DetailFragment extends Fragment
         detailTitleTextView = view.findViewById(R.id.detailTitleInputEditText);
         detailDescriptionTextView = view.findViewById(R.id.detailDescriptionInputEditText);
         linearLayout = view.findViewById(R.id.fragmentDetailLinearLayout);
-        getLoaderManager().initLoader(EVENT_LOADER,
+        getLoaderManager().initLoader(NOTE_LOADER,
                                       null,
                                       this);
         return view;
@@ -99,41 +99,41 @@ public class DetailFragment extends Fragment
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_delete:
-                deleteEvent();
+                deleteNote();
                 return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
 
-    private void deleteEvent() {
+    private void deleteNote() {
 //        confirmDelete.show(getFragmentManager(), "confirm delete");
         getActivity().getContentResolver().delete(
-                eventUri,
+                noteUri,
                 null,
                 null
         );
-        deleteEvent = true;
-        listener.onEventDeleted();
+        deleteNote = true;
+        listener.onNoteDeleted();
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        if (!deleteEvent) {
+        if (!deleteNote) {
             ContentValues contentValues = new ContentValues();
-            contentValues.put(Event.COLUMN_TITLE,
+            contentValues.put(Note.COLUMN_TITLE,
                               detailTitleTextView.getText().toString());
-            contentValues.put(Event.COLUMN_DESCRIPTION,
+            contentValues.put(Note.COLUMN_DESCRIPTION,
                               detailDescriptionTextView.getText().toString());
 
-            int updatedRows = getActivity().getContentResolver().update(eventUri,
+            int updatedRows = getActivity().getContentResolver().update(noteUri,
                                                                         contentValues,
                                                                         null,
                                                                         null);
             if (updatedRows <= 0) {
                 Snackbar.make(linearLayout,
-                              R.string.event_update_error,
+                              R.string.note_update_error,
                               Snackbar.LENGTH_LONG).show();
             }
 
@@ -148,9 +148,9 @@ public class DetailFragment extends Fragment
         CursorLoader cursorLoader;
 
         switch (i) {
-            case EVENT_LOADER:
+            case NOTE_LOADER:
                 cursorLoader = new CursorLoader(getActivity(),
-                                                eventUri,
+                                                noteUri,
                                                 null,
                                                 null,
                                                 null,
@@ -167,9 +167,9 @@ public class DetailFragment extends Fragment
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
         if (cursor != null && cursor.moveToFirst()) {
-            int titleIndex = cursor.getColumnIndex(Event.COLUMN_TITLE);
-            int descriptionIndex = cursor.getColumnIndex(Event.COLUMN_DESCRIPTION);
-            int colorIndex = cursor.getColumnIndex(Event.COLUMN_COLOR);
+            int titleIndex = cursor.getColumnIndex(Note.COLUMN_TITLE);
+            int descriptionIndex = cursor.getColumnIndex(Note.COLUMN_DESCRIPTION);
+            int colorIndex = cursor.getColumnIndex(Note.COLUMN_COLOR);
 
             detailTitleTextView.setText(cursor.getString(titleIndex));
             detailDescriptionTextView.setText(cursor.getString(descriptionIndex));

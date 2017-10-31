@@ -1,21 +1,21 @@
-package kaichi.crowdy.database;
+package kaichi.notepad.database;
 
 
 import android.content.ContentUris;
 import android.net.Uri;
 import android.provider.BaseColumns;
 
-public class EventDatabaseContract {
+public class NoteDatabaseContract {
 
     public static final String AUTHORITY =
-            "kaichi.crowdy.database";
+            "kaichi.notepad.database";
 
     private static final Uri BASE_CONTENT_URI =
             Uri.parse("content://" + AUTHORITY);
 
-    public static final class Event implements BaseColumns {
+    public static final class Note implements BaseColumns {
 
-        public static final String TABLE_NAME = "events";
+        public static final String TABLE_NAME = "notes";
 
         public static final Uri CONTENT_URI =
                 BASE_CONTENT_URI.buildUpon().appendPath(TABLE_NAME).build();
@@ -26,14 +26,14 @@ public class EventDatabaseContract {
         public static final String COLUMN_COLOR = "color";
 
 
-        //create a Uri for a specific event
-        public static Uri buildEventUri(long id) {
+        //create a Uri for a specific note
+        public static Uri buildNoteUri(long id) {
             return ContentUris.withAppendedId(CONTENT_URI,
                                               id);
         }
 
     }
 
-    private EventDatabaseContract() {
+    private NoteDatabaseContract() {
     }
 }

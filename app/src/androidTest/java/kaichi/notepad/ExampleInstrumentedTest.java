@@ -1,4 +1,4 @@
-package kaichi.crowdy;
+package kaichi.notepad;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

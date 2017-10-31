@@ -1,4 +1,4 @@
-package kaichi.crowdy;
+package kaichi.notepad;
 
 
 import android.content.ContentValues;
@@ -26,25 +26,25 @@ import android.widget.TextView;
 
 import com.jaredrummler.android.colorpicker.ColorPickerDialog;
 
-import static kaichi.crowdy.database.EventDatabaseContract.Event;
+import static kaichi.notepad.database.NoteDatabaseContract.Note;
 
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class AddEventFragment extends Fragment
+public class AddNoteFragment extends Fragment
         implements LoaderManager.LoaderCallbacks<Cursor> {
 
     //defines callback methd implemented by MainActivity
-    public interface AddEventFragmentListener {
-        //called when event is saved
-        void onAddEventCompleted(Uri eventUri);
+    public interface AddNoteFragmentListener {
+        //called when note is saved
+        void onAddNoteCompleted(Uri noteUri);
     }
 
-    private static final int EVENT_LOADER = 0;
-    private AddEventFragmentListener listener;
-    private Uri eventUri;
-    private boolean addingNewEvent = true;
+    private static final int NOTE_LOADER = 0;
+    private AddNoteFragmentListener listener;
+    private Uri noteUri;
+    private boolean addingNewNote = true;
     private TextInputLayout titleTextInputLayout;
     private TextInputLayout descriptionTextInputLayout;
     private TextView colorTextView;
@@ -55,7 +55,7 @@ public class AddEventFragment extends Fragment
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        listener = (AddEventFragmentListener) context;
+        listener = (AddNoteFragmentListener) context;
     }
 
     @Override
@@ -72,26 +72,26 @@ public class AddEventFragment extends Fragment
                            savedInstanceState);
         setHasOptionsMenu(true);
 
-        View view = inflater.inflate(R.layout.fragment_add_event,
+        View view = inflater.inflate(R.layout.fragment_add_note,
                                      container,
                                      false);
         titleTextInputLayout = view.findViewById(R.id.titleTextInputLayout);
         titleTextInputLayout.getEditText().addTextChangedListener(titleChangedListener);
         descriptionTextInputLayout = view.findViewById(R.id.descriptionTextInputLayout);
         colorTextView = view.findViewById(R.id.colorTextView);
-        setEventColor(ResourcesCompat.getColor(getResources(), R.color.colorLightPrimaryColor, null));
+        setNoteColor(ResourcesCompat.getColor(getResources(), R.color.colorLightPrimaryColor, null));
         colorTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 ((InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE))
                         .hideSoftInputFromWindow(getView().getWindowToken(),
                                                  0);
-                ColorPickerDialog.newBuilder().setShowAlphaSlider(true).show(getActivity());
+                ColorPickerDialog.newBuilder().setShowColorShades(false).show(getActivity());
             }
         });
 
         saveButton = view.findViewById(R.id.saveButton);
-        saveButton.setOnClickListener(saveEventButtonClicked);
+        saveButton.setOnClickListener(saveNoteButtonClicked);
         updateSaveButton();
 
         coordinatorLayout = getActivity().findViewById(R.id.coordinatorLayout);
@@ -99,13 +99,13 @@ public class AddEventFragment extends Fragment
         Bundle arguments = getArguments();
 
         if (arguments != null) {
-            addingNewEvent = false;
-            eventUri = arguments.getParcelable(MainActivity.EVENT_URI);
+            addingNewNote = false;
+            noteUri = arguments.getParcelable(MainActivity.NOTE_URI);
         }
 
-        //if editing an existing event - create Loader to get the event
-        if (eventUri != null) {
-            getLoaderManager().initLoader(EVENT_LOADER,
+        //if editing an existing note - create Loader to get the note
+        if (noteUri != null) {
+            getLoaderManager().initLoader(NOTE_LOADER,
                                           null,
                                           this);
         }
@@ -138,49 +138,49 @@ public class AddEventFragment extends Fragment
             saveButton.setEnabled(false);
     }
 
-    private final View.OnClickListener saveEventButtonClicked = new View.OnClickListener() {
+    private final View.OnClickListener saveNoteButtonClicked = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             //hide the virtual keyboard
             ((InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE))
                     .hideSoftInputFromWindow(getView().getWindowToken(),
                                              0);
-            saveEvent();
+            saveNote();
         }
     };
 
-    private void saveEvent() {
+    private void saveNote() {
         ContentValues contentValues = new ContentValues();
-        contentValues.put(Event.COLUMN_TITLE,
+        contentValues.put(Note.COLUMN_TITLE,
                           titleTextInputLayout.getEditText().getText().toString());
-        contentValues.put(Event.COLUMN_DESCRIPTION,
+        contentValues.put(Note.COLUMN_DESCRIPTION,
                           descriptionTextInputLayout.getEditText().getText().toString());
-        contentValues.put(Event.COLUMN_COLOR,
+        contentValues.put(Note.COLUMN_COLOR,
                           color);
 
-        if (addingNewEvent) {
-            Uri newEventUri = getActivity().getContentResolver().insert(Event.CONTENT_URI,
+        if (addingNewNote) {
+            Uri newNoteUri = getActivity().getContentResolver().insert(Note.CONTENT_URI,
                                                                         contentValues);
-            if (newEventUri != null) {
-                listener.onAddEventCompleted(newEventUri);
+            if (newNoteUri != null) {
+                listener.onAddNoteCompleted(newNoteUri);
             } else {
                 Snackbar.make(coordinatorLayout,
-                              getString(R.string.add_event_error),
+                              getString(R.string.add_note_error),
                               Snackbar.LENGTH_LONG).show();
             }
         } else {
-            int updatedRows = getActivity().getContentResolver().update(eventUri,
+            int updatedRows = getActivity().getContentResolver().update(noteUri,
                                                                         contentValues,
                                                                         null,
                                                                         null);
             if (updatedRows > 0) {
-                listener.onAddEventCompleted(eventUri);
+                listener.onAddNoteCompleted(noteUri);
                 Snackbar.make(coordinatorLayout,
-                              R.string.event_updated,
+                              R.string.note_updated,
                               Snackbar.LENGTH_LONG).show();
             } else {
                 Snackbar.make(coordinatorLayout,
-                              R.string.event_update_error,
+                              R.string.note_update_error,
                               Snackbar.LENGTH_LONG).show();
             }
         }
@@ -189,9 +189,9 @@ public class AddEventFragment extends Fragment
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         switch (id) {
-            case EVENT_LOADER:
+            case NOTE_LOADER:
                 return new CursorLoader(getActivity(),
-                                        eventUri,
+                                        noteUri,
                                         null,
                                         null,
                                         null,
@@ -204,8 +204,8 @@ public class AddEventFragment extends Fragment
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         if (data != null && data.moveToFirst()) {
-            int titleIndex = data.getColumnIndex(Event.COLUMN_TITLE);
-            int descriptionIndex = data.getColumnIndex(Event.COLUMN_DESCRIPTION);
+            int titleIndex = data.getColumnIndex(Note.COLUMN_TITLE);
+            int descriptionIndex = data.getColumnIndex(Note.COLUMN_DESCRIPTION);
 
             titleTextInputLayout.getEditText().setText(data.getString(titleIndex));
             descriptionTextInputLayout.getEditText().setText(data.getString(descriptionIndex));
@@ -219,7 +219,8 @@ public class AddEventFragment extends Fragment
 
     }
 
-    public void setEventColor(int color) {
+    public void setNoteColor(int color) {
+        color = Color.argb(128, Color.red(color), Color.green(color), Color.blue(color));
         setColor(color);
         colorTextView.setBackgroundColor(color);
         colorTextView.setTextColor(getContrastColor(color));
