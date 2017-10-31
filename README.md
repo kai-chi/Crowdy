@@ -3,4 +3,4 @@ Yet another notepad. Called Notepad-- because it's so simple and smooth with tho
 
 Simply upload and take notes 
 
-![alt-text](https://github.com/kai-chi/Notepad--/blob/master/Screenshot_20171031-232502.png)
+![alt-text](https://github.com/kai-chi/Notepad--/blob/master/Screenshot_20171031-232502.png | width = 250)
